@@ -1,0 +1,12 @@
+torch 
+torchvision
+scikit-image
+opencv-python
+matplotlib
+pandas
+scipy
+segmentation_models_pytorch
+scikit-learn
+mlxtend
+shap
+seaborn
