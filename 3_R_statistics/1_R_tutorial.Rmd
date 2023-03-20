@@ -1,0 +1,174 @@
+---
+title: "R_tutorial"
+output: html_document
+date: "2023-03-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Load libraries
+```{r}
+library(tidyverse)
+```
+
+
+# Basic datatypes
+- numerical
+- character
+- logical
+- vector/list
+- matrix/dataframe
+
+Numerical:
+```{r}
+x <- 5
+y <- 3.14
+print(x)
+```
+
+Numerical operations:
+```{r}
+x + y # 8.14
+x - y # 1.86
+x * y # 15.7
+x / y # 1.5923567
+```
+
+Character:
+```{r}
+z <- "Hello, world !"
+
+z <- paste("Hello,", "world", "!", sep = " ") # "Hello, world !"
+```
+
+Logical:
+```{r}
+a <- TRUE
+b <- FALSE
+```
+
+Logical operations:
+```{r}
+a & b # TRUE AND FALSE -> FALSE 
+a | b # TRUE OR FALSE -> TRUE
+```
+
+Vectors:
+```{r}
+my_vector<-c(1,2,6,7)
+
+sequence<-seq(1,5,by=1) # c(1,2,3,4,5)
+sequence<-1:5 # c(1,2,3,4,5)
+
+c(sequence,my_vector) # c(1,2,3,4,5,1,2,6,7)
+```
+
+Lists:
+```{r}
+my_list <- list(a=5,b=8)
+print(my_list[["a"]])
+```
+
+DataFrame:
+```{r}
+df<-data.frame(x=0:22,y=seq(3,3+22*2,by=2))
+df$y<-sqrt(df$x)
+df
+```
+
+Matrix:
+```{r}
+df.matrix<-as.matrix(df)
+t(df.matrix)^2
+```
+
+# Functions/Loops
+```{r}
+power.function <- function(x,n){
+  return(x^n)
+}
+
+power.function(2,4)
+```
+
+```{r}
+for (i in seq(1,5)){
+  print(power.function(2,i))
+}
+```
+
+# Plotting
+```{r}
+ggplot(df,aes(x=x,y=y))+geom_line()
+```
+
+```{r}
+ggplot(df,aes(x=x))+geom_boxplot()
+```
+
+
+# Statistics
+
+# Data simulation
+```{r}
+set.seed(123)
+n <- 1000
+age <- rnorm(n, mean = 40, sd = 10)
+gender <- sample(c("male", "female"), n, replace = TRUE, prob = c(0.4, 0.6))
+smoking <- sample(c("never", "former", "current"), n, replace = TRUE, prob = c(0.5, 0.2, 0.3))
+BMI <- rnorm(n, mean = 25, sd = 5)
+confounder <- rnorm(n, mean = 20, sd = 10)
+log_odds <- -0.5 + 0.05*age + 3.0*(gender == "male") + 0.3*(smoking == "current") - 0.1*BMI + 0.2*confounder
+prob <- exp(log_odds) / (1 + exp(log_odds))
+outcome <- factor(rbinom(n, 1, prob))
+dataset <- data.frame(outcome, age, gender, smoking, BMI, confounder)
+```
+
+
+# Compare group means
+```{r}
+set.seed(123)
+group1 <- rnorm(30, mean = 5, sd = 2)
+group2 <- rnorm(30, mean = 7, sd = 2)
+
+dat<-data.frame(group1=group1,group2=group2) %>% pivot_longer(cols=c("group1","group2"))
+
+ggplot(data=dat,aes(x=value,color=name))+geom_boxplot()+theme_classic()
+```
+# T-test
+```{r}
+t.test(group1, group2)
+```
+
+# See whether outcome is related to gender
+```{r}
+table(dataset$gender, dataset$outcome)
+
+ggplot(dataset,aes(x=gender,fill=outcome))+geom_bar(position="fill")
+```
+
+# Chisq Test
+```{r}
+chisq.test(dataset$gender, dataset$outcome)
+```
+
+# Compare age and smoking
+```{r}
+ggplot(dataset,aes(x=smoking,y=age))+geom_boxplot()+theme_classic()
+```
+
+# Run ANOVA to see whether age is related to smoking
+```{r}
+anova(model <- lm(age ~ smoking, data = dataset))
+```
+
+# Multivariable regression, controlling for other confounders
+```{r}
+summary(glm(outcome ~ age + gender + smoking + BMI + confounder, data = dataset, family = binomial))
+
+```
+
+# Machine learning
+https://github.com/jlevy44/MolecularPathologyMachineLeaningTutorial/blob/main/R/1_fitting_ml_models.Rmd
