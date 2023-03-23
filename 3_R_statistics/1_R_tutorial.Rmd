@@ -39,8 +39,13 @@ x / y # 1.5923567
 Character:
 ```{r}
 z <- "Hello, world !"
+z
+```
 
+
+```{r}
 z <- paste("Hello,", "world", "!", sep = " ") # "Hello, world !"
+z
 ```
 
 Logical:
@@ -68,6 +73,7 @@ c(sequence,my_vector) # c(1,2,3,4,5,1,2,6,7)
 Lists:
 ```{r}
 my_list <- list(a=5,b=8)
+
 print(my_list[["a"]])
 ```
 
@@ -87,7 +93,7 @@ t(df.matrix)^2
 # Functions/Loops
 ```{r}
 power.function <- function(x,n){
-  return(x^n)
+ return(x^n)
 }
 
 power.function(2,4)
@@ -101,7 +107,7 @@ for (i in seq(1,5)){
 
 # Plotting
 ```{r}
-ggplot(df,aes(x=x,y=y))+geom_line()
+ggplot(df,aes(x=x,y=y))+geom_point()+theme_classic()
 ```
 
 ```{r}
@@ -124,6 +130,16 @@ log_odds <- -0.5 + 0.05*age + 3.0*(gender == "male") + 0.3*(smoking == "current"
 prob <- exp(log_odds) / (1 + exp(log_odds))
 outcome <- factor(rbinom(n, 1, prob))
 dataset <- data.frame(outcome, age, gender, smoking, BMI, confounder)
+dataset
+```
+```{r}
+write.csv(dataset,"my_dataset.csv")
+```
+
+```{r}
+new_data<-read.csv("my_dataset.csv")[,-1]
+
+new_data
 ```
 
 
